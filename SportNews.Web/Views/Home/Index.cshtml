@@ -1,0 +1,169 @@
+﻿@model PageModel<Post>
+@{
+    ViewData["Title"] = "SPORT RESULTS";   
+}
+
+
+<head>
+    <title> Массив постов</title>
+    <style>
+        h1{
+            text-align: center;
+        }
+        img{
+            width: 75%;
+        }
+        body{
+        background-image: src(~/Source/background-stadium.jpg);
+        background-attachment: fixed;
+        }
+        
+        .container-footer{
+        position:static;
+        }
+        .container-right{
+            
+            text-align: center;
+
+            height: 100%; /* Full-height: remove this if you want "auto" height */
+            width: 20%; /* Set the width of the sidebar */
+            position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+            z-index: 1; /* Stay on top */
+            top: 0; /* Stay at the top */
+            left: 0;
+            background-color: #006666; 
+            
+            overflow-x:hidden; /* Disable horizontal scroll */
+            padding-top: 20px;
+            margin-left: 80%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            
+        }
+        .container-main{
+            
+            min-width: 80%;
+            max-width: 80%;
+            /* margin-right: 10ch; */
+        }
+        .btn-main {
+            margin-right: 10px;
+        }  
+        .container-news{
+            
+            margin-top: 20px;
+            max-width: 75%;
+            border-radius: 3%;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+
+            background-color: #f64c72;
+            margin-bottom: 5ch;
+        }
+        .img-news{
+            border-radius: 2%;
+        }
+        h2{
+            padding-top: 0.5ch;
+            color:rgba(0, 0, 0, 0.5);
+            max-width: 85%;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+        p{
+            max-width: 85%;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+        href{
+            color:aqua;
+        }
+        .news-my{
+            max-width: 85%;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+        .btn-r {float: right}
+         .indient{
+            margin-top: 56px;
+        }
+        .p-2{
+            padding: 0px!important
+        }
+    </style>
+</head>
+<body>  
+    
+    <div>
+        
+        <section class="news container-main" > <div style="text-align: center; " class="container text-center mx-auto">
+        <h1 class="fw-bold section-title">Новости</h1>
+        @foreach(var post in Model.Items)
+        {
+            <div class="container-news mx-auto">
+                    <article class="art">
+                        <h2 class="geo">@post.Title</h2> 
+                        <p>Опубликовал @post.Author.Name</p>
+                        <img class="img-news"src="@post.Image">
+                        <p class="description" style="padding-bottom: 2ch">@post.Description</p>  
+                    </article>
+            </div>                           
+        }
+        <div class = "container">
+                    @if(Model.Pager.TotalPages > 0)
+                    {
+                        <ul class ="pagination justify-content-end">
+                            @for(var page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
+                            {
+                                <li class ="page-item" @(page == Model.Pager.CurrentPage ? "active" : "")>
+                                    <a class = "page-link" asp-controller = "Home" asp-action = "Index" asp-route-page = "@(page)">@(page)</a>
+                                </li>
+                            }
+                        </ul>
+                    }
+        </div>
+
+        
+
+        </section>
+        <div class="container-right indient">
+            <header>
+                @{
+                    if(!Context.Session.TryGetUser(out User user))
+                    {
+                                <div class="d-inline-flex p-2">
+                                    <p class="fs-4">
+                                        Гость
+                                    </p>
+                                </div>
+                                <form action=@Url.Action("Index","Authentification") method="post">
+                                    <button class="btn btn-primary"type="submit">Авторизация</button>
+                                </form>
+                    }
+                    else
+                    {
+                            <div class"d-inline-flex p-2">
+                                <p class="fs-4">
+                                    @user.Name
+                                </p>
+                            </div>
+                            
+                            <form action="Authentification/Deauth" method="post">
+                                <button class="btn btn-primary"type="submit">Выйти</button>
+                            </form>
+                    }
+                }
+            </header>
+                
+            
+        </div>
+    </div>
+    
+</body>
+

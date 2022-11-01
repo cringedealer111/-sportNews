@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Sport Results</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Store.Web.styles.css" asp-append-version="true" />
+    <style>
+        .nav-size{
+            height: 56px;
+        }
+        .indient{
+            margin-top: 60px;
+        }
+       
+    </style>
+</head>
+<body>
+    <header> 
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top nav-size">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <strong>SPORT RESULTS</strong>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Contacts">
+                                Контакты
+                            </a>
+                        </li>                        
+                        <li class="nav-item dropdown">
+                            <form action="@Url.Action("Index", "Home")" method="post">
+                                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                    <li class="nav-item">
+                                        <select class="form-control" name="disciplineId">
+                                            <option  hidden>Дисциплины</option>
+                                        @foreach (var discipline in Discipline.Disciplines)
+                                        {
+                                            <option value="@discipline.Id">@discipline.Name</option>
+                                        }
+                                    </select>
+                                    </li>
+                                    <li class="nav-item">
+                                         <button type="submit" class="btn btn-secondary">
+                                        Показать
+                                    </button>
+                                    </li>
+                                </ul>
+                            </form>
+                        </li>
+                            
+                        <li class="nav-item d-flex">
+                            @if (Context.Session.TryGetUser(out User user)&&user.Role == Role.Moderator)
+                            {
+                                <form action="@Url.Action("Index","Administration")" method="post">
+                                    <button class="btn btn-primary btn-r" type="submit">
+                                        Создать новый пост
+                                    </button>
+                                </form>
+                            }
+                        </li>
+                    </ul>
+                    <form class="d-flex" role="search">
+                                    <input class="form-control me-2" type="search" placeholder="" aria-label="Search">
+                                        <button class="btn btn-outline-secondary" type="submit">
+                                            Поиск
+                                        </button>
+                        </form>
+                </div>
+            </div>  
+        </nav>
+    </header>
+
+    <div class="container indient">
+        <main>
+            @RenderBody()
+        </main>
+    </div>
+</body>
+</html>
