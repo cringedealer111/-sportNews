@@ -28,22 +28,11 @@ namespace SportNews.Web.Controllers
                 HttpContext.Session.Set(userRepository.GetById(user.Id));
             }
 
-            if (query != null)
-            {
-                var posts = postService.GetAllByQuery(query).ToList();
-                var model = new PageModel<Post>(posts, page, disciplineId, query);
-                return View("Index", model);
+            var posts = query != null ? postService.GetAllByQuery(query).ToList() : disciplineId == 0 ? postRepository.GetPosts() : postRepository.GetPosts().Where(post => post.Discipline?.Id == disciplineId);           
+            var model = new PageModel<Post>(posts, page, disciplineId, query);
 
-            }
-            else
-            {
-                var posts = disciplineId == 0 ? postRepository.GetPosts() : postRepository.GetPosts().Where(post => post.Discipline?.Id == disciplineId);
-                var model = new PageModel<Post>(posts, page, disciplineId, query);
-                return View("Index", model);
-            }
-
-            
-
+            return View(model);
+                       
 
         }
 
