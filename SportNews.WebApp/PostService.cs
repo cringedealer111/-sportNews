@@ -20,8 +20,10 @@ namespace SportNews.WebApp
 
         public IEnumerable<Post> GetAllByQuery(string query)
         {
+            query = query.ToLower();
             var posts = postRepository.GetPosts();
-            return posts.Where(post => post.Title.Contains(query) || post.Author.Name.Contains(query));
+
+            return posts.Where(post => post.Title.ToLower().Contains(query) || post.Description.ToLower().Contains(query));
         }
     }
 }

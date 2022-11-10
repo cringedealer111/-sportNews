@@ -26,7 +26,8 @@ namespace SportNews.Web.Controllers
                 }
                 return View("Index");
             }
-            else                       
+            else
+               
                return View("Index");
             
         }

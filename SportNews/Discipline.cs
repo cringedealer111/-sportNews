@@ -32,6 +32,16 @@ namespace SportNews
             {
                 Id=4,
                 Name = "Баскетбол"
+            },
+            new Discipline
+            {
+                Id = 5,
+                Name = "Бокс / MMA"
+            },
+            new Discipline
+            {
+                Id=6,
+                Name="Плавание"
             }
 
         };

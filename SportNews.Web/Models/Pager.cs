@@ -42,11 +42,15 @@
     {
         public IEnumerable<T> Items { get; private set; }
         public Pager Pager { get; private set; }
-        public PageModel(IEnumerable<T> items, int page)
+        public int DisciplineId { get; private set; }
+        public string Query { get; private set; }
+        public PageModel(IEnumerable<T> items, int page, int disciplineId, string query)
         {            
-            int skip = (page - 1) * 2;
-            Pager = Pager.Create(items.Count(), page, 2);
+            int skip = (page - 1) * 5;
+            Pager = Pager.Create(items.Count(), page, 5);
             Items = items.Skip(skip).Take(Pager.PageSize).ToList();
+            DisciplineId = disciplineId;
+            Query = query;
         }        
     
     }

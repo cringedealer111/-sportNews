@@ -20,13 +20,14 @@ namespace SportNews.Web.Controllers
         }
         public IActionResult Auth(string login, string password)
         {
+
             if (userRepository.Authentificate(login, password, out User user))
             {
                 HttpContext.Session.Set(user);
                 return RedirectToAction("Index", "Home");
             }
             else
-                return View();
+                return View("Index");
         }
         public IActionResult Deauth()
         {

@@ -2,34 +2,56 @@
 using SportNews;
 using SportNews.Data;
 using SportNews.Web.Models;
+using SportNews.WebApp;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace SportNews.Web.Controllers
 {
     public class HomeController : Controller
     {
         private readonly PostRepository postRepository;
+        private readonly PostService postService;
+        private readonly UserRepository userRepository;
 
-
-        public HomeController(PostRepository postRepository)
+        public HomeController(PostRepository postRepository, UserRepository userRepository, PostService postService)
         {
             this.postRepository = postRepository;
+            this.userRepository = userRepository;
+            this.postService = postService;
         }
 
-        public IActionResult Index(int page = 1, int disciplineId=0)
-        {                       
-            var posts = disciplineId == 0 ? postRepository.GetPosts() : postRepository.GetPosts().Where(post => post.Discipline.Id == disciplineId);                                   
-
-            var model = new PageModel<Post>(posts, page);
-
-            return View("Index", model);
-        }
-
-        public IActionResult LoadByDiscipline(int id)
+        public IActionResult Index(string? query, int page = 1, int disciplineId=0)
         {
-            var model = postRepository.GetPosts().Where(x=>x.Discipline.Id==id).ToList();
-            return View("Index", model);
+            if (HttpContext.Session.TryGetUser(out var user))
+            {
+                HttpContext.Session.Set(userRepository.GetById(user.Id));
+            }
+
+            if (query != null)
+            {
+                var posts = postService.GetAllByQuery(query).ToList();
+                var model = new PageModel<Post>(posts, page, disciplineId, query);
+                return View("Index", model);
+
+            }
+            else
+            {
+                var posts = disciplineId == 0 ? postRepository.GetPosts() : postRepository.GetPosts().Where(post => post.Discipline?.Id == disciplineId);
+                var model = new PageModel<Post>(posts, page, disciplineId, query);
+                return View("Index", model);
+            }
+
+            
+
+
         }
+
+        //public IActionResult LoadByDiscipline(int id)
+        //{
+        //    var model = postRepository.GetPosts().Where(x=>x.Discipline.Id==id).ToList();
+        //    return View("Index", model);
+        //}
         
         public IActionResult Contacts()
         {

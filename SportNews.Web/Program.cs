@@ -1,4 +1,5 @@
 using SportNews.Data;
+using SportNews.WebApp;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<UserRepository>();
 builder.Services.AddSingleton<PostRepository>();
+builder.Services.AddSingleton<PostService>();
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(20);

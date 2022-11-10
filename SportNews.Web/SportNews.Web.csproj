@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SportNews.Data\SportNews.Data.csproj" />
+    <ProjectReference Include="..\SportNews.WebApp\SportNews.WebApp.csproj" />
   </ItemGroup>
 
 </Project>

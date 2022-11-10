@@ -5,72 +5,76 @@
 
 
 <head>
-    <title> Массив постов</title>
+
     <style>
-        h1{
-            text-align: center;
-        }
-        img{
+        img {
             width: 75%;
         }
-        body{
-        background-image: src(~/Source/background-stadium.jpg);
-        background-attachment: fixed;
-        }
-        
-        .container-footer{
-        position:static;
-        }
-        .container-right{
-            
-            text-align: center;
 
-            height: 100%; /* Full-height: remove this if you want "auto" height */
-            width: 20%; /* Set the width of the sidebar */
-            position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-            z-index: 1; /* Stay on top */
-            top: 0; /* Stay at the top */
-            left: 0;
-            background-color: #006666; 
-            
-            overflow-x:hidden; /* Disable horizontal scroll */
-            padding-top: 20px;
-            margin-left: 80%;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            
+        body {
+            background-color: #4e5761;
+            background-attachment: fixed;
         }
-        .container-main{
-            
-            min-width: 80%;
-            max-width: 80%;
+
+        .container-footer {
+            position: static;
+        }
+
+        .container-right {
+            border-top: 10ch;
+            text-align: center;
+            /*height: 755.375px; */
+            width: 30%;
+          
+            margin-left:1%;
+            left: 0;
+            overflow-x: hidden; 
+            padding-top: 20px;
+/*            margin-left: 73%;*/
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .container-left{
+            width: 79%;
+        }
+
+        .main-container-main{
+            display:block;
+            width:100%;
+        }
+        .container-main {
+            display: inline-flex;
+            width:80%
             /* margin-right: 10ch; */
         }
+
         .btn-main {
             margin-right: 10px;
-        }  
-        .container-news{
-            
+        }
+
+        .container-news {
             margin-top: 20px;
             max-width: 75%;
             border-radius: 3%;
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
-
-            background-color: #f64c72;
             margin-bottom: 5ch;
         }
-        .img-news{
+
+        .img-news {
             border-radius: 2%;
         }
-        h2{
+
+        h2 {
             padding-top: 0.5ch;
-            color:rgba(0, 0, 0, 0.5);
+            color: rgba(0, 0, 0, 0.5);
             max-width: 85%;
             margin-left: auto;
             margin-right: auto;
             padding-left: 16px;
             padding-right: 16px;
         }
-        p{
+
+        p {
             max-width: 85%;
             margin-left: auto;
             margin-right: auto;
@@ -79,90 +83,110 @@
             padding-left: 16px;
             padding-right: 16px;
         }
-        href{
-            color:aqua;
+
+        href {
+            color: aqua;
         }
-        .news-my{
+
+        .news-my {
             max-width: 85%;
             margin-left: auto;
             margin-right: auto;
             padding-left: 16px;
             padding-right: 16px;
         }
-        .btn-r {float: right}
-         .indient{
+
+        .btn-r {
+            float: right
+        }
+
+        .indient {
             margin-top: 56px;
         }
-        .p-2{
-            padding: 0px!important
+
+        .p-2 {
+            padding: 0px !important
         }
     </style>
+
 </head>
 <body>  
     
-    <div>
-        
-        <section class="news container-main" > <div style="text-align: center; " class="container text-center mx-auto">
-        <h1 class="fw-bold section-title">Новости</h1>
-        @foreach(var post in Model.Items)
-        {
-            <div class="container-news mx-auto">
-                    <article class="art">
-                        <h2 class="geo">@post.Title</h2> 
-                        <p>Опубликовал @post.Author.Name</p>
-                        <img class="img-news"src="@post.Image">
-                        <p class="description" style="padding-bottom: 2ch">@post.Description</p>  
-                    </article>
-            </div>                           
-        }
-        <div class = "container">
-                    @if(Model.Pager.TotalPages > 0)
-                    {
-                        <ul class ="pagination justify-content-end">
-                            @for(var page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
-                            {
-                                <li class ="page-item" @(page == Model.Pager.CurrentPage ? "active" : "")>
-                                    <a class = "page-link" asp-controller = "Home" asp-action = "Index" asp-route-page = "@(page)">@(page)</a>
-                                </li>
-                            }
-                        </ul>
+    <div class="container">
+        <h1 class="fw-bold text-center" style="padding-top:2ch; padding-bottom:2ch;">НОВОСТИ</h1>
+            <div class="container-main" style="margin-left:14.5ch;"> 
+                <div style="text-align: left; " class="container-left">
+                    @if(Model.Items.Count()==0){
+                        <div class="bg-dark" >
+                            <a style="margin-left:10%;font-size: 24px; color: #fff">Извините, новостей пока что нет. Загляните позже!</a>
+                        </div>
                     }
-        </div>
+                    @foreach(var post in Model.Items)
+                    {
+                        <div style="margin-bottom: 7ch">
+                            <article class="data-container-news bg-dark" style="padding-top: 2ch; padding-bottom:1ch;">
+                                @{
+                                    if (Context.Session.TryGetUser(out var tempUser) && tempUser.Role != Role.Common)
+                                    {
+                                        <form action="@Url.Action("RemovePost","Administration")" method="get">
+                                            <input hidden value="@post.Id" name="postId">
+                                                <button class="btn btn-warning" style="margin-left:2ch" type="submit">
+                                                    Удалить пост
+                                                </button>
+                                        </form>
+                                    }
+                                }
+                                <h2 class="geo mx-auto text-light">@post.Title</h2>
+                                <p class="mx-auto text-light">Опубликовал @post.Author.Name в @post.Created</p>
+                                <img class="img-news mx-auto" style="display: flex;" src="@post.Image">
+                                <p class="description text-light" style="text-align:justify; padding-bottom: 2ch; ">&nbsp;&nbsp;&nbsp;&nbsp;@post.Description</p>
+                            </article>
+                        </div>
+                    }
 
-        
 
-        </section>
-        <div class="container-right indient">
-            <header>
+
+                        <div class = "container">
+                            @if(Model.Pager.TotalPages > 0)
+                            {
+                                <ul class ="pagination justify-content-center">
+                                    @for(var page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
+                                    {
+                                        <li class ="page-item" @(page == Model.Pager.CurrentPage ? "active" : "")>
+                                            <a class = "page-link" href="@Url.Action("Index", "Home", new {query = Model.Query, page = page, disciplineId = Model.DisciplineId})">@(page)</a>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        </div>        
+                </div>       
+                <div class="container-right bg-dark">         
                 @{
                     if(!Context.Session.TryGetUser(out User user))
                     {
-                                <div class="d-inline-flex p-2">
-                                    <p class="fs-4">
-                                        Гость
-                                    </p>
-                                </div>
-                                <form action=@Url.Action("Index","Authentification") method="post">
-                                    <button class="btn btn-primary"type="submit">Авторизация</button>
-                                </form>
-                    }
+                        <div class="d-inline-flex p-2">
+                            <p class="fs-4 text-light">
+                                Гость
+                            </p>
+                        </div>
+                        <form action=@Url.Action("Index","Authentification") method="post">
+                            <button class="btn btn-primary"type="submit">Авторизация</button>
+                        </form>
+                    }                                                                          
                     else
                     {
-                            <div class"d-inline-flex p-2">
-                                <p class="fs-4">
-                                    @user.Name
-                                </p>
-                            </div>
-                            
-                            <form action="Authentification/Deauth" method="post">
-                                <button class="btn btn-primary"type="submit">Выйти</button>
-                            </form>
+                        <div class"d-inline-flex p-2">
+                            <p class="fs-4 text-light">
+                                 @user.Name
+                            </p>
+                        </div>
+                        <form action="Authentification/Deauth" method="post">
+                            <button class="btn btn-primary"type="submit">Выйти</button>
+                        </form>
                     }
-                }
-            </header>
-                
-            
-        </div>
+                }                            
+                </div>
+            </div>
     </div>
     
 </body>
