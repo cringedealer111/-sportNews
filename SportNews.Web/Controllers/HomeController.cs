@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SportNews;
 using SportNews.Data;
 using SportNews.Web.Models;
@@ -20,7 +21,8 @@ namespace SportNews.Web.Controllers
             this.userRepository = userRepository;
             this.postService = postService;
         }
-
+        
+        
         public IActionResult Index(string? query, int page = 1, int disciplineId=0)
         {
             if (HttpContext.Session.TryGetUser(out var user))

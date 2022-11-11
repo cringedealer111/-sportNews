@@ -1,13 +1,25 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using SportNews.Data;
 using SportNews.WebApp;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddSingleton<UserRepository>();
+
 builder.Services.AddSingleton<PostRepository>();
+
 builder.Services.AddSingleton<PostService>();
+
+builder.Services.AddAuthentication("Bearer")  
+                .AddJwtBearer();
+
+
+builder.Services.AddAuthorization();
+
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(20);
@@ -17,11 +29,10 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    
     app.UseHsts();
 }
 
@@ -31,7 +42,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 
-app.UseAuthorization();
+app.UseAuthentication();   
+app.UseAuthorization();     
 
 
 app.UseSession();
