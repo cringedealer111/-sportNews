@@ -36,12 +36,6 @@ namespace SportNews.Web.Controllers
 
         }
 
-        //public IActionResult LoadByDiscipline(int id)
-        //{
-        //    var model = postRepository.GetPosts().Where(x=>x.Discipline.Id==id).ToList();
-        //    return View("Index", model);
-        //}
-        
         public IActionResult Contacts()
         {
             return View();
